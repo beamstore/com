@@ -645,17 +645,17 @@
         // 3. จัดการ UI สลับหน้าไปมา
         // ----------------------------------------------------
         function toggleMenu() { 
-            const sidebar = document.getElementById('sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            if (sidebar) sidebar.classList.toggle('translate-x-full'); 
-            if (backdrop) backdrop.classList.toggle('hidden'); 
+            const sb = document.getElementById('sidebar');
+            const bd = document.getElementById('sidebar-backdrop');
+            if (sb) sb.classList.toggle('translate-x-full'); 
+            if (bd) bd.classList.toggle('hidden'); 
         }
         
         function closeMenu() { 
-            const sidebar = document.getElementById('sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            if (sidebar) sidebar.classList.add('translate-x-full'); 
-            if (backdrop) backdrop.classList.add('hidden'); 
+            const sb = document.getElementById('sidebar');
+            const bd = document.getElementById('sidebar-backdrop');
+            if (sb) sb.classList.add('translate-x-full'); 
+            if (bd) bd.classList.add('hidden'); 
         }
         
         function showView(id) { 
@@ -1456,7 +1456,7 @@
             
             for(let i=0; i<appProducts.length; i++) {
                 let p = appProducts[i];
-                let stockDisp = p.category === 'แอพพรีเมียม' ? `ว่าง: ${p.stock}` : 'สินค้าพรีออเดอร์';
+                let stockDisp = p.category === 'แอพพรีเมียม' ? `ว่าง: ${p.stock}` : 'สินค้าส่งตรง (ไม่ออโต้)';
                 
                 let addStockBtn = p.category === 'แอพพรีเมียม' 
                     ? `<button onclick="openAddStockModal('${p.id}', '${p.name}')" class="text-pastel-500 bg-pastel-50 w-9 h-9 rounded-lg hover:bg-pastel-500 hover:text-white transition shadow-sm"><i class="fa-solid fa-plus"></i></button>` 
