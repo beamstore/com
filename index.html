@@ -80,7 +80,6 @@
             -webkit-text-fill-color: transparent; 
         }
         
-        /* Marquee Animation */
         .marquee-wrapper { 
             width: 100%; 
             overflow: hidden; 
@@ -104,7 +103,6 @@
             100% { transform: translateX(-100%); } 
         }
 
-        /* SweetAlert Styling - Pink Theme */
         .swal2-popup { 
             border-radius: 2rem !important; 
             background: #fff0f5 !important; 
@@ -525,7 +523,7 @@
 
     <script>
         // ----------------------------------------------------
-        // 1. เปลี่ยน URL API ของ Apps Script เป็นของคุณ
+        // 1. URL API ของ Apps Script
         // ----------------------------------------------------
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxGJ5EOT2j-Y_oltbfvqujxYeyxXYQo0bTDrJ9oM0aCCt0CaOZqeVlX7CbrDUXfVOoFDg/exec";
         
@@ -631,7 +629,7 @@
                 const mq = document.getElementById('marquee-text');
                 
                 if (res && res.status === 'success' && res.data.length > 0) {
-                    let text = res.data.map(item => `<i class="fa-solid fa-basket-shopping text-pink-400 mr-1"></i> ลค. ${item.user} สั่งซื้อ ${item.product} (${timeAgo(item.time)})`).join(" &nbsp;&nbsp;|&nbsp;&nbsp; ");
+                    let text = res.data.map(item => `<i class="fa-solid fa-basket-shopping text-pastel-400 mr-1"></i> ลค. ${item.user} สั่งซื้อ ${item.product} (${timeAgo(item.time)})`).join(" &nbsp;&nbsp;|&nbsp;&nbsp; ");
                     if (mq) mq.innerHTML = text;
                 } else {
                     if (mq) mq.innerText = "ยินดีต้อนรับสู่ร้านค้าของเรา! แหล่งรวมสินค้าราคาถูก";
@@ -1163,7 +1161,7 @@
         }
 
         // ----------------------------------------------------
-        // เรนเดอร์หน้าจอแสดงสินค้า
+        // เรนเดอร์หน้าจอแสดงสินค้า (และจัดเรียง)
         // ----------------------------------------------------
         function generateProductHTML(p) {
             let stockBadge = ''; 
@@ -1223,12 +1221,20 @@
                 </div>
             `;
         }
+        
+        // ฟังก์ชันช่วยเรียงลำดับสินค้า (เลขน้อยไปมาก และ ตัวอักษร ก-ฮ)
+        function sortProducts(productsArray) {
+            return productsArray.sort((a, b) => {
+                return a.name.localeCompare(b.name, 'th', { numeric: true, sensitivity: 'base' });
+            });
+        }
 
         async function fetchAndRenderProducts() {
             try {
                 const resProd = await fetchGAS({action: 'getProducts'});
                 if(resProd && resProd.status === 'success') { 
-                    appProducts = resProd.data; 
+                    // ทำการจัดเรียงสินค้าที่ได้รับมาทันที
+                    appProducts = sortProducts(resProd.data); 
                     renderProductsHome(); 
                     renderAdminProductList(); 
                 }
@@ -1276,8 +1282,9 @@
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
                 `; 
                 
+                // ดึงสินค้าในหมวดหมู่ และจัดเรียง
                 let catProducts = appProducts.filter(p => (p.category ? p.category.trim() : 'อื่นๆ') === cat);
-                catProducts.sort((a, b) => a.name.localeCompare(b.name, 'th'));
+                catProducts = sortProducts(catProducts);
                 
                 for(let i=0; i<catProducts.length; i++) {
                     html += generateProductHTML(catProducts[i]); 
